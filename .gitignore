@@ -1,0 +1,17 @@
+_data
+_data/*
+*.log
+.DS_Store
+phpcs*.tmp
+*.swp
+.sass-cache
+.sass-cache/*
+node_modules
+node_modules/*
+src/js/libs/*
+*.sublime-project
+*.sublime-workspace
+.sublime-grunt.cache
+bower_components
+dist
+.idea*
