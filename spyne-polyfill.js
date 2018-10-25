@@ -1,57 +1,71 @@
-// Number.isNaN
-// Number.isNaN() polyfill
-!(typeof Number.isNaN === 'function') ||
-(Number.isNaN = function (value) {
-  return value !== null // Number(null) => 0
-      && (value !== value // NaN != NaN
-          || +value !== value // Number(falsy) => 0 && falsy == 0...
-      )
-});
 
-// see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/isNaN#Description
-// for explanation of coercions (false, '0', '', null, and undefined)
+// ==================
+// INDEX OF
+// ==================
+if (!Array.prototype.indexOf)  Array.prototype.indexOf = (function(Object, max, min){
+  "use strict";
+  return function indexOf(member, fromIndex) {
+    if(this===null||this===undefined)throw TypeError("Array.prototype.indexOf called on null or undefined");
 
-console.warn(
-    [2, 3, 5, 7,
-      -0,
-      Number.NEGATIVE_INFINITY,
-      Number.POSITIVE_INFINITY,
-      +false, // +false => 0
-      +true,
-      false, // Number(false) => 0
-      true,
-      '0', // Number('0') => 0
-      '1',
-      '', // Number('') => 0
-      '       ',
-      null // Number(null) => 0
-    ]
-    .map(function(value) {
-      return !Number.isNaN(value);
-    })
-    .filter(function(ok, i) {
-      console.log(ok)
-      return ok || (function(i) {
-        throw 'test ' + (i) + ' failed.'
-      }(i))
-    })
-);
+    var that = Object(this), Len = that.length >>> 0, i = min(fromIndex | 0, Len);
+    if (i < 0) i = max(0, Len+i); else if (i >= Len) return -1;
 
-console.warn(
-    [undefined, // +undefined => NaN
-      'jimmy',   // +'non-digit-string' => NaN
-      1 * 'a',   // multiplication on non-numeric value,
-      NaN        // because NaN !== NaN, of course
-    ]
-    .map(function(value) {
-      return Number.isNaN(value);
-    })
-    .filter(function(ok, i) {
-      return ok || (function(i) {
-        throw 'test ' + (i) + ' failed.'
-      }(i))
-    })
-);
+    if(member===void 0){ for(; i !== Len; ++i) if(that[i]===void 0 && i in that) return i; // undefined
+    }else if(member !== member){   for(; i !== Len; ++i) if(that[i] !== that[i]) return i; // NaN
+    }else                           for(; i !== Len; ++i) if(that[i] === member) return i; // all else
+
+    return -1; // if the value was not found, then return -1
+  };
+})(Object, Math.max, Math.min);
+
+// =========
+// FOR EACH
+// =========
+if ('NodeList' in window && !NodeList.prototype.forEach) {
+  //console.info('polyfill for IE11');
+  NodeList.prototype.forEach = function (callback, thisArg) {
+    thisArg = thisArg || window;
+    for (var i = 0; i < this.length; i++) {
+      callback.call(thisArg, this[i], i, this);
+    }
+  };
+}
+
+
+// =========================================================================================================================
+// IS NAN
+// =========================================================================================================================
+
+if (!Number.isNaN) {
+  (function(global) {
+    var defineProperty = (function() {
+      // IE 8 only supports `Object.defineProperty` on DOM elements
+      try {
+        var object = {};
+        var $defineProperty = Object.defineProperty;
+        var result = $defineProperty(object, object, object) && $defineProperty;
+      } catch(error) {}
+      return result;
+    }());
+
+    var globalIsNaN = global.isNaN;
+
+    // Source: http://wiki.ecmascript.org/doku.php?id=harmony:number.isnan
+    var isNaN = function(value) {
+      return typeof value === 'number' && globalIsNaN(value);
+    };
+
+    if (defineProperty) {
+      defineProperty(Number, 'isNaN', {
+        'value': isNaN,
+        'configurable': true,
+        'writable': true
+      });
+    } else {
+      Number.isNaN = isNaN;
+    }
+  }(this));
+}
 // =========================================================================================================================
 
 // PROMISE POLYFILL
