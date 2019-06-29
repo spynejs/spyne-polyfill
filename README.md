@@ -1,2 +1,2 @@
 # Spyne Polyfill for IE 11
-This polyfilll is currently outdated, and will not support the latest version of spyne.
+This polyfill adds core-js, whatwg-fetch and a jserz node.remove
