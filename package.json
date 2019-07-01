@@ -1,10 +1,10 @@
 {
   "name": "spynejs-polyfill",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "polyfill for Microsoft Internet Explorer and Edge browsers",
   "main": "lib/spynejs-polyfill.js",
   "scripts": {
-    "build" : "webpack",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "@babel/core": "^7.4.5",
     "babel-core": "^6.26.3",
+    "classlist-polyfill": "^1.2.0",
     "core-js": "^3.1.4",
     "webpack": "^4.35.0",
     "whatwg-fetch": "^3.0.0"
