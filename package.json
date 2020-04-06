@@ -1,6 +1,6 @@
 {
   "name": "spynejs-polyfill",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "polyfill for Microsoft Internet Explorer and Edge browsers",
   "main": "lib/spynejs-polyfill.js",
   "scripts": {
